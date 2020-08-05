@@ -21,7 +21,6 @@ public class KeyParameters {
                     algorithm = AlgorithmIdentifier.getInstance((ASN1TaggedObject) tagObj, false);
                 }
             }
-
         }
     }
 

@@ -1,9 +1,11 @@
 package svkreml.extractKey;
 
 import org.bouncycastle.asn1.*;
+import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemWriter;
 import svkreml.extractKey.dto.Container;
+import svkreml.extractKey.dto.ProviderType;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -11,20 +13,15 @@ import java.io.OutputStreamWriter;
 
 public class PrivateKeyExport {
     private static ASN1Object EncodePrivateKey(Container container) throws IOException {
+        AlgorithmIdentifier algorithm = container.header().privateKeyParameters.algorithm;
+                AlgorithmIdentifier algorithmIdentifier = new AlgorithmIdentifier(
+                        ProviderType.getSignAlgorithmId(ProviderType.getProviderType(container.header().privateKeyParameters.algorithm.getAlgorithm())),
+                        algorithm.getParameters()
+                        );
         return new DERSequence(
                 new ASN1Encodable[]{
                         new ASN1Integer(0),
-                        new DERSequence(
-                                new ASN1Encodable[]{
-                                        new ASN1ObjectIdentifier("1.2.643.7.1.1.1.1"),
-                                        new DERSequence(
-                                                new ASN1ObjectIdentifier[]{
-                                                        new ASN1ObjectIdentifier("1.2.643.2.2.36.0"),
-                                                        new ASN1ObjectIdentifier("1.2.643.7.1.1.2.2")
-                                                }
-                                        )
-                                }
-                        ),
+                        algorithmIdentifier,
                         new DEROctetString(new ASN1Integer(container.GetPrivateKey()))
                 }
         );
@@ -40,12 +37,3 @@ public class PrivateKeyExport {
         }
     }
 }
-
-
-    /*
-    *  1.2.643.7.1.1.1.1 gost2012PublicKey256 (GOST R 34.10-2012 256 bit public key)
-    SEQUENCE (2 elem)
-      OBJECT IDENTIFIER 1.2.643.2.2.36.0 cryptoProSignXA (CryptoPro ell.curve XA for GOST R 34.10-2001)
-      OBJECT IDENTIFIER 1.2.643.7.1.1.2.2 gos
-      *
-      * */
