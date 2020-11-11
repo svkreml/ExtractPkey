@@ -34,14 +34,23 @@ public class Header {
                 if(tagObj instanceof ASN1TaggedObject) {
                     ASN1TaggedObject tag = ASN1TaggedObject.getInstance(tagObj);
 
+                    byte[] encodedCert = tagObj.toASN1Primitive().getEncoded();
                     switch (tag.getTagNo()) {
                         case 5:
                             // byte[] cert = el
-                            certificate = X509Reader.decodeCert(tagObj.toASN1Primitive().getEncoded());
+                            try {
+                                certificate = X509Reader.decodeCert(encodedCert);
+                            } catch (Exception e) {
+                                certificate = X509Reader.decodeCert(Arrays.copyOfRange(encodedCert, 4, encodedCert.length));
+                            }
 
                             break;
                         case 6:
-                            certificate2 = X509Reader.decodeCert(tagObj.toASN1Primitive().getEncoded());
+                            try {
+                                certificate2 = X509Reader.decodeCert(encodedCert);
+                            } catch (Exception e) {
+                                certificate2 = X509Reader.decodeCert(Arrays.copyOfRange(encodedCert, 4, encodedCert.length));
+                            }
                             break;
                         case 10:
                             publicX = ASN1OctetString.getInstance(tag.getObject().getEncoded()).getOctets();

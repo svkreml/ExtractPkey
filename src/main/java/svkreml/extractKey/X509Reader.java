@@ -67,6 +67,8 @@ public class X509Reader {
     }
 
     public static X509Certificate decodeCert(byte[] input) throws CertificateException {
+
+
         return (X509Certificate) CertificateFactory.getInstance("X.509").generateCertificate(
                 new ByteArrayInputStream(MeUtils.normalizeDer(input))
         );
