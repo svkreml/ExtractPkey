@@ -9,7 +9,10 @@ import java.io.IOException;
 public class FullTest {
     @Test
     public void test() throws IOException {
-        Container container = new FolderContainer("00000000.000", "123456");
+
+        String pathToConteinerFolder = "00000000.000";
+        String pincode = "123456";
+        Container container = new FolderContainer(pathToConteinerFolder, pincode);
         new PrivateKeyExport().Export(container, System.out);
         Assert.assertEquals(true,true);
     }
