@@ -22,9 +22,9 @@ public enum ProviderType {
     public static ProviderType getProviderType(ASN1ObjectIdentifier algId) {
         if (algId.equals(CryptoProObjectIdentifiers.gostR3410_2001DH))
             return ProviderType.CryptoPro_2001;
-        if (algId.equals(RosstandartObjectIdentifiers.id_tc26_agreement_gost_3410_12_256))
+        if (algId.equals(RosstandartObjectIdentifiers.id_tc26_agreement_gost_3410_12_256) || RosstandartObjectIdentifiers.id_tc26_gost_3410_12_256.equals(algId))
             return ProviderType.CryptoPro_2012_512;
-        if (algId.equals(RosstandartObjectIdentifiers.id_tc26_agreement_gost_3410_12_512))
+        if (algId.equals(RosstandartObjectIdentifiers.id_tc26_agreement_gost_3410_12_512) || RosstandartObjectIdentifiers.id_tc26_gost_3410_12_512.equals(algId))
             return ProviderType.CryptoPro_2012_1024;
 
         throw new RuntimeException("Неподдерживаемый OID: " + algId);
